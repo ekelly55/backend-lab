@@ -45,17 +45,29 @@ router.get("/:id", async (req, res) => {
 
 
 
-// PEOPLE DELETE ROUTE
-router.delete("/:id", async (req, res) => {
-	res.status(200).json({message: "people delete route: " + req.params.id })
-});
-
 // PEOPLE UPDATE ROUTE
 router.put("/:id", async (req, res) => {
-	console.log(req.body)
-	res.status(200).json({message: "people update route: " + req.params.id })
-});
-
-
+	try {
+	  // update people by ID
+	  res.json(
+		await People.findByIdAndUpdate(req.params.id, req.body, {new:true})
+	  );
+	} catch (error) {
+	  //send error
+	  res.status(400).json(error);
+	}
+  });
+  
+  // PEOPLE DELETE ROUTE
+  router.delete("/:id", async (req, res) => {
+	try {
+	  // delete people by ID
+	  res.json(await People.findByIdAndRemove(req.params.id));
+	} catch (error) {
+	  //send error
+	  res.status(400).json(error);
+	}
+  });
+  
 
 module.exports = router
